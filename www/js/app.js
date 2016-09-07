@@ -26,5 +26,12 @@ app.run(function($ionicPlatform) {
 });
 
 app.controller('mainController', function($scope){
-    $scope.mensagem = '';
+    var tasks = new getTasks();
+
+    $scope.lista = tasks.items;
+
+    $scope.onMarkTask = function(item) {
+        console.log('passou');
+        item.finalizada = !item.finalizada;
+    };
 });
