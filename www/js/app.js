@@ -25,7 +25,7 @@ app.run(function($ionicPlatform) {
   });
 });
 
-app.controller('mainController', function($scope, $ionicPopup){
+app.controller('mainController', function($scope, $ionicPopup, $ionicListDelegate){
     var tasks = new getTasks();
 
     $scope.lista = tasks.items;
@@ -35,23 +35,27 @@ app.controller('mainController', function($scope, $ionicPopup){
     $scope.removeStatus = false;
 
     // Metodo local, nao esta ligado a view por isso nao usa $scope
-    function getItem(item) {
+    function getItem(item, novo, title) {
         $scope.data = {};
-        $scope.data.newTask = "";
+        $scope.data.newTask = item.nome;
 
         $ionicPopup.show({
-            title: "Nova tarefa",
+            title: title,
             scope: $scope,
             template: "<input type='text' placeholder='Tarefa' autofocus='true' data-ng-model='data.newTask'>",
             buttons: [
                 {text: "Ok",
                  onTap: function(e) {
                     item.nome = $scope.data.newTask;
-                    tasks.add(item);
+                    if(novo) {
+                        tasks.add(item);
+                    }
                  }},
                 {text: "Cancel"}
             ]
         });
+
+        $ionicListDelegate.closeOptionButtons();
     };
 
     $scope.onMarkTask = function(item) {
@@ -63,11 +67,16 @@ app.controller('mainController', function($scope, $ionicPopup){
         return item.finalizada && !$scope.showMarked;
     };
 
-    $scope.onItemAdd = function() {
-        var item = {nome: "teste", finalizada: false};
+    $scope.onItemAdd = function(item) {
+        var item = {nome: "", finalizada: false};
+        title = "Nova tarefa";
+        getItem(item, true, title);
+    };
 
-        getItem(item);
-    }
+    $scope.onItemEdit = function(item) {
+        title = "Editar tarefa";
+        getItem(item, false, title);
+    };
 
     $scope.onItemRemove = function(item) {
         tasks.remove(item);
