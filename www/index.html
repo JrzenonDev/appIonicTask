@@ -50,7 +50,14 @@
             </ion-footer-bar>
 
             <ion-content>
-                <button class="button button-block button-assertive" data-ng-click="onClickRemove()">Remove</button>
+                <div class="row">
+                    <div class="col col-50">
+                        <button class="button button-block button-positive" data-ng-click="onItemAdd()">Add</button>
+                    </div>
+                    <div class="col col-50">
+                        <button class="button button-block button-assertive" data-ng-click="onClickRemove()">Remove</button>
+                    </div>
+                </div>
                 <ion-list class="list" show-delete="removeStatus">
                     <ion-item class="item" data-ng-repeat="item in lista track by $index" data-ng-hide="onHideItem(item)">
                         <div class="row">

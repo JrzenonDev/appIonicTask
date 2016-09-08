@@ -25,7 +25,7 @@ app.run(function($ionicPlatform) {
   });
 });
 
-app.controller('mainController', function($scope){
+app.controller('mainController', function($scope, $ionicPopup){
     var tasks = new getTasks();
 
     $scope.lista = tasks.items;
@@ -33,6 +33,26 @@ app.controller('mainController', function($scope){
     // Metodos
     $scope.showMarked = false;
     $scope.removeStatus = false;
+
+    // Metodo local, nao esta ligado a view por isso nao usa $scope
+    function getItem(item) {
+        $scope.data = {};
+        $scope.data.newTask = "";
+
+        $ionicPopup.show({
+            title: "Nova tarefa",
+            scope: $scope,
+            template: "<input type='text' placeholder='Tarefa' autofocus='true' data-ng-model='data.newTask'>",
+            buttons: [
+                {text: "Ok",
+                 onTap: function(e) {
+                    item.nome = $scope.data.newTask;
+                    tasks.add(item);
+                 }},
+                {text: "Cancel"}
+            ]
+        });
+    };
 
     $scope.onMarkTask = function(item) {
         console.log('passou');
@@ -42,6 +62,12 @@ app.controller('mainController', function($scope){
     $scope.onHideItem = function(item) {
         return item.finalizada && !$scope.showMarked;
     };
+
+    $scope.onItemAdd = function() {
+        var item = {nome: "teste", finalizada: false};
+
+        getItem(item);
+    }
 
     $scope.onItemRemove = function(item) {
         tasks.remove(item);
