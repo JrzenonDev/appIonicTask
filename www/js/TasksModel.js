@@ -1,10 +1,20 @@
 function getTasks() {
-    this.items = [
-        {nome: 'Item 01', finalizada: false},
-        {nome: 'Item 02', finalizada: false},
-        {nome: 'Item 03', finalizada: false},
-        {nome: 'Item 01', finalizada: false}
-    ];
+
+    this.items = [];
+
+    var lista = localStorage.getItem("tasklist");
+
+    if(lista != null)
+        this.items = angular.fromJson(lista);    // Converte a lista em um OBJ
+
+    this.save = function() {
+
+        // Converte o obj em string
+        var  lista = angular.toJson(this.items);
+
+        // Armazenamento em local Storage
+        localStorage.setItem("tasklist", lista);
+    }
 
     // Metodo para adicionar um item na lista
     this.add = function(item) {
